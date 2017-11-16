@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Khadis Asfyandiyarov](https://up.htmlacademy.ru/javascript/11/user/112475).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Рубец](https://up.htmlacademy.ru/javascript/11/user/41580).
 
 ---
 
