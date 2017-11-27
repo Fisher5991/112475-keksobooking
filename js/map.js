@@ -1,0 +1,110 @@
+'use strict';
+
+var userNumber = 1;
+var PRE_NUMBER_ID = '0';
+var userId = 0;
+
+var titlesHouse = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
+
+var typesHouse = ['flat', 'house', 'bungalo'];
+var timesCheck = ['12:00', '13:00', '14:00'];
+var featuresValues = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var similarAds = [];
+var titles = [];
+
+var generateNumber = function (minNumber, maxNumber) {
+  return Math.round(Math.random() * (maxNumber - minNumber)) + minNumber;
+};
+
+var generateFeature = function () {
+  var featuresList = [];
+  var featuresValuesWorking = featuresValues.slice();
+  featuresList.length = generateNumber(1, featuresValuesWorking.length); // длина случайного массива [4]
+  for (var i = 0; i < featuresList.length; i++) {
+    var generationFeaturesIndex = generateNumber(0, featuresValuesWorking.length - 1);
+    var feature = featuresValuesWorking[generationFeaturesIndex];
+    featuresValuesWorking.splice(generationFeaturesIndex, 1);
+    featuresList.splice(i, 1, feature);
+  }
+  return featuresList;
+};
+
+var generateUserId = function () {
+  if (userNumber < 10) {
+    userId = PRE_NUMBER_ID + userNumber;
+    userNumber++;
+    return userId;
+  } else {
+    userId = userNumber;
+    userNumber++;
+    return userId;
+  }
+}
+
+while (titlesHouse.length > 0) {
+  var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1);
+  var title = titlesHouse[generationTitlesIndex];
+  titlesHouse.splice(generationTitlesIndex, 1);
+  titles.push(title);
+};
+
+for (var i = 0; i < 8; i++) {
+  var coordinateX = generateNumber(300, 900);
+  var coordinateY = generateNumber(100, 500);
+  var ad = {
+    'author': {
+      'avatar': 'img/avatars/user' + generateUserId() + '.png'
+    },
+    'offer': {
+      'title': titles[i],
+      'address': coordinateX + ', ' + coordinateY,
+      'price': generateNumber(1000, 1000000),
+      'type': typesHouse[generateNumber(0, typesHouse.length - 1)],
+      'rooms': generateNumber(1, 5),
+      'guests': generateNumber(1, 10),
+      'checkin': timesCheck[generateNumber(0, timesCheck.length - 1)],
+      'checkout': timesCheck[generateNumber(0, timesCheck.length - 1)],
+      'features': generateFeature(),
+      'description': '',
+      'photos': ''
+    },
+    'location': {
+      'x': coordinateX,
+      'y': coordinateY
+    }
+  }
+  similarAds.push(ad);
+}
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+var fragment = document.createDocumentFragment();
+var template = document.querySelector('template').content;
+var mapPins = document.querySelector('.map__pins');
+var mapPin = template.querySelector('.map__pin');
+var mapPinWidth = 46;
+var mapPinHeight = 62;
+
+var renderPin = function (dataAd) {
+  var mapPinElement = mapPin.cloneNode(true);
+  mapPinElement.style.left = dataAd.location.x - mapPinWidth / 2;
+  mapPinElement.style.top = dataAd.location.y - mapPinHeight;
+  mapPinElement.querySelector('img').src = dataAd.author.avatar;
+  return mapPinElement;
+}
+
+for (var i = 0; i < similarAds.length; i++) {
+  fragment.appendChild(renderPin(similarAds[i]));
+}
+
+mapPins.appendChild(fragment);
