@@ -84,7 +84,7 @@ var generateAds = function () {
         'x': coordinateX,
         'y': coordinateY
       }
-    }
+    };
     similarAds.push(ad);
   }
 };
@@ -112,16 +112,14 @@ var renderPin = function (dataAd) {
 var getTypeName = function (type) {
   if (type === typesHouse[0]) {
     type = 'Квартира';
-    return type;
   }
   if (type === typesHouse[1]) {
     type = 'Дом';
-    return type;
   }
   if (type === typesHouse[2]) {
     type = 'Бунгало';
-    return type;
   }
+  return type;
 };
 
 var getFeatureElements = function (features) {
