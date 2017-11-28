@@ -1,6 +1,7 @@
 'use strict';
 
 var userNumber = 1;
+var userIdAmount = 10;
 var PRE_NUMBER_ID = '0';
 var userId = 0;
 
@@ -20,6 +21,12 @@ var timesCheck = ['12:00', '13:00', '14:00'];
 var featuresValues = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var similarAds = [];
 var titles = [];
+var minPrice = 1000;
+var maxPrice = 1000000;
+var minRoomsAmount = 1;
+var maxRoomsAmount = 5;
+var minGuestsAmount = 1;
+var maxGuestsAmount = 5;
 var minValueX = 300;
 var maxValueX = 900;
 var minValueY = 100;
@@ -53,7 +60,7 @@ var generateFeature = function () {
 };
 
 var generateUserId = function () {
-  if (userNumber < 10) {
+  if (userNumber < userIdAmount) {
     userId = PRE_NUMBER_ID + userNumber;
   } else {
     userId = userNumber;
@@ -83,10 +90,10 @@ var generateAds = function () {
       'offer': {
         'title': titles[i],
         'address': coordinateX + ', ' + coordinateY,
-        'price': generateNumber(1000, 1000000),
+        'price': generateNumber(minPrice, maxPrice),
         'type': typesHouse[generateNumber(0, typesHouse.length - 1)],
-        'rooms': generateNumber(1, 5),
-        'guests': generateNumber(1, 5),
+        'rooms': generateNumber(minRoomsAmount, maxRoomsAmount),
+        'guests': generateNumber(minGuestsAmount, maxGuestsAmount),
         'checkin': timesCheck[generateNumber(0, timesCheck.length - 1)],
         'checkout': timesCheck[generateNumber(0, timesCheck.length - 1)],
         'features': generateFeature(),
