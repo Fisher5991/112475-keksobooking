@@ -48,42 +48,46 @@ var generateUserId = function () {
     userNumber++;
     return userId;
   }
-}
-
-while (titlesHouse.length > 0) {
-  var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1);
-  var title = titlesHouse[generationTitlesIndex];
-  titlesHouse.splice(generationTitlesIndex, 1);
-  titles.push(title);
 };
 
-for (var i = 0; i < 8; i++) {
-  var coordinateX = generateNumber(300, 900);
-  var coordinateY = generateNumber(100, 500);
-  var ad = {
-    'author': {
-      'avatar': 'img/avatars/user' + generateUserId() + '.png'
-    },
-    'offer': {
-      'title': titles[i],
-      'address': coordinateX + ', ' + coordinateY,
-      'price': generateNumber(1000, 1000000),
-      'type': typesHouse[generateNumber(0, typesHouse.length - 1)],
-      'rooms': generateNumber(1, 5),
-      'guests': generateNumber(1, 5),
-      'checkin': timesCheck[generateNumber(0, timesCheck.length - 1)],
-      'checkout': timesCheck[generateNumber(0, timesCheck.length - 1)],
-      'features': generateFeature(),
-      'description': '',
-      'photos': ''
-    },
-    'location': {
-      'x': coordinateX,
-      'y': coordinateY
-    }
+var generateTitles = function () {
+  while (titlesHouse.length > 0) {
+    var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1);
+    var title = titlesHouse[generationTitlesIndex];
+    titlesHouse.splice(generationTitlesIndex, 1);
+    titles.push(title);
   }
-  similarAds.push(ad);
-}
+};
+
+var generateAds = function () {
+  for (var i = 0; i < 8; i++) {
+    var coordinateX = generateNumber(300, 900);
+    var coordinateY = generateNumber(100, 500);
+    var ad = {
+      'author': {
+        'avatar': 'img/avatars/user' + generateUserId() + '.png'
+      },
+      'offer': {
+        'title': titles[i],
+        'address': coordinateX + ', ' + coordinateY,
+        'price': generateNumber(1000, 1000000),
+        'type': typesHouse[generateNumber(0, typesHouse.length - 1)],
+        'rooms': generateNumber(1, 5),
+        'guests': generateNumber(1, 5),
+        'checkin': timesCheck[generateNumber(0, timesCheck.length - 1)],
+        'checkout': timesCheck[generateNumber(0, timesCheck.length - 1)],
+        'features': generateFeature(),
+        'description': '',
+        'photos': ''
+      },
+      'location': {
+        'x': coordinateX,
+        'y': coordinateY
+      }
+    }
+    similarAds.push(ad);
+  }
+};
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -142,14 +146,21 @@ var renderAd = function (dataAd) {
   return adElement;
 };
 
-for (var i = 0; i < similarAds.length; i++) {
-  fragment.appendChild(renderPin(similarAds[i]));
-}
+var addFragmentPin = function () {
+  for (var i = 0; i < similarAds.length; i++) {
+    fragment.appendChild(renderPin(similarAds[i]));
+  }
+};
 
+var addFragmentAd = function () {
+  for (var i = 0; i < similarAds.length; i++) {
+    fragment.appendChild(renderAd(similarAds[i]));
+  }
+};
+
+generateTitles();
+generateAds();
+addFragmentPin();
+addFragmentAd();
 mapPins.appendChild(fragment);
-
-for (var i = 0; i < similarAds.length; i++) {
-  fragment.appendChild(renderAd(similarAds[i]));
-}
-
 map.insertBefore(fragment, mapFilters);
