@@ -84,25 +84,25 @@ var generateAds = function () {
     var coordinateX = generateNumber(minValueX, maxValueX);
     var coordinateY = generateNumber(minValueY, maxValueY);
     var adItem = {
-      'author': {
-        'avatar': 'img/avatars/user' + generateUserId() + '.png'
+      author: {
+        avatar: 'img/avatars/user' + generateUserId() + '.png'
       },
-      'offer': {
-        'title': titles[i],
-        'address': coordinateX + ', ' + coordinateY,
-        'price': generateNumber(minPrice, maxPrice),
-        'type': typesHouse[generateNumber(0, typesHouse.length - 1)],
-        'rooms': generateNumber(minRoomsAmount, maxRoomsAmount),
-        'guests': generateNumber(minGuestsAmount, maxGuestsAmount),
-        'checkin': timesCheck[generateNumber(0, timesCheck.length - 1)],
-        'checkout': timesCheck[generateNumber(0, timesCheck.length - 1)],
-        'features': generateFeature(),
-        'description': '',
-        'photos': ''
+      offer: {
+        title: titles[i],
+        address: coordinateX + ', ' + coordinateY,
+        price: generateNumber(minPrice, maxPrice),
+        type: typesHouse[generateNumber(0, typesHouse.length - 1)],
+        rooms: generateNumber(minRoomsAmount, maxRoomsAmount),
+        guests: generateNumber(minGuestsAmount, maxGuestsAmount),
+        checkin: timesCheck[generateNumber(0, timesCheck.length - 1)],
+        checkout: timesCheck[generateNumber(0, timesCheck.length - 1)],
+        features: generateFeature(),
+        description: '',
+        photos: ''
       },
-      'location': {
-        'x': coordinateX,
-        'y': coordinateY
+      location: {
+        x: coordinateX,
+        y: coordinateY
       }
     };
     similarAds.push(adItem);
