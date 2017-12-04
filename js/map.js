@@ -42,6 +42,9 @@ var mapPinHeight = 62;
 var mapCard = template.querySelector('.map__card');
 var mapFilters = document.querySelector('.map__filters-container');
 
+var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
+
 var generateNumber = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber)) + minNumber;
 };
@@ -164,10 +167,59 @@ var addFragmentAd = function () {
   }
 };
 
-map.classList.remove('map--faded');
 generateTitles();
 generateAds();
 addFragmentPin();
-addFragmentAd();
-mapPins.appendChild(fragment);
-map.insertBefore(fragment, mapFilters);
+
+/* --------------- Задание 2 ------------------ */
+
+var noticeForm = document.querySelector('.notice__form');
+var noticeFieldSet = noticeForm.querySelectorAll('fieldset');
+var mapPinMain = map.querySelector('.map__pin--main');
+var mapPinItems = map.querySelectorAll('.map__pin');
+var popup = map.querySelector('.popup');
+var popupCloseButton = map.querySelector('.popup__close');
+/*addFragmentAd();
+map.insertBefore(fragment, mapFilters);*/
+
+var disableField = function () {
+  for (var i = 0; i < noticeFieldSet.length; i++) {
+    noticeFieldSet[i].disabled = true;
+  }
+};
+
+var enableField = function () {
+  for (var i = 0; i < noticeFieldSet.length; i++) {
+    noticeFieldSet[i].disabled = false;
+  }
+};
+
+var openPage = function () {
+  map.classList.remove('map--faded');
+  mapPins.appendChild(fragment);
+  noticeForm.classList.remove('notice__form--disabled');
+  enableField();
+};
+
+var deactivateMapPins = function () {
+  debugger;
+  for (var i = 0; i < mapPinItems.length; i++) {
+    var mapPinItem = mapPinItems[i];
+    if (mapPinItem.classList.contains('active')) {
+      mapPinItem.classList.remove('active');
+    }
+  }
+}
+
+disableField();
+
+mapPinMain.addEventListener('mouseup', function () {
+  openPage();
+});
+
+mapPins.addEventListener('click', function (evt) {
+  deactivateMapPins();
+  if (evt.target.tagName === 'BUTTON') {
+    evt.target.classList.add('active');
+  }
+});
