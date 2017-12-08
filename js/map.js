@@ -43,19 +43,16 @@ var mapPinWidth = 46;
 var mapPinHeight = 62;
 var mapFilters = document.querySelector('.map__filters-container');
 
-var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
 
-// Генерируем случайные числа в диапазоне
 var generateNumber = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber)) + minNumber;
 };
 
-// Генерируем список преимуществ
 var generateFeature = function () {
   var featuresList = []; // создаётся новый массив для преимуществ для каждого объявления
   var featuresValuesWorking = featuresValues.slice(); // копируем возможные значения преимушеств, чтобы не портить изначальный массив, в "рабочий" массив
-  featuresList.length = generateNumber(1, featuresValuesWorking.length); //генерируем количество преимуществ
+  featuresList.length = generateNumber(1, featuresValuesWorking.length); // генерируем количество преимуществ
   for (var i = 0; i < featuresList.length; i++) {
     var generationFeaturesIndex = generateNumber(0, featuresValuesWorking.length - 1); // генерируем индекс, узнав текущую длину "рабочего" массива
     var feature = featuresValuesWorking[generationFeaturesIndex]; // получаем преимущество с сгенерированным индексом
@@ -65,7 +62,6 @@ var generateFeature = function () {
   return featuresList; //возвращаем список преимуществ для одного объявления
 };
 
-// Генерируем ID юзера
 var generateUserId = function () {
   if (userNumber < userIdAmount) {
     userId = PRE_NUMBER_ID + userNumber;
@@ -76,7 +72,6 @@ var generateUserId = function () {
   return userId;
 };
 
-// Генерируем заголовки предложений
 var generateTitles = function () {
   while (titlesHouse.length > 0) {
     var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1); // генерируем индекс названия жилища
@@ -127,7 +122,6 @@ var renderPin = function (dataAd) {
   return mapPinElement;
 };
 
-// Получаем название типа из массива для вывода в объявлении
 var getTypeName = function (type) {
   if (type === typesHouse[0]) {
     type = 'Квартира';
@@ -191,8 +185,6 @@ var activeMapPin;
 var noticeForm = document.querySelector('.notice__form');
 var noticeFieldSet = noticeForm.querySelectorAll('fieldset');
 var mapPinMain = map.querySelector('.map__pin--main');
-var popupClose = map.querySelector('.popup__close');
-var ESC_KEYCODE = 27;
 
 var toFindCloseButton = function () {
   var popupCloseButtons = map.querySelectorAll('.popup__close');
