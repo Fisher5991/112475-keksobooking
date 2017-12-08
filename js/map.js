@@ -1,8 +1,8 @@
 'use strict';
 
-var userNumber = 1;
-var userIdAmount = 10;
 var PRE_NUMBER_ID = '0';
+var userNumber = 1; // счётчик пользователей
+var userIdAmount = 10; // значение, с которого перед ID перестаёт добавляться PRE_NUMBER_ID = '0'
 var userId = 0;
 
 var titlesHouse = [
@@ -19,8 +19,8 @@ var titlesHouse = [
 var typesHouse = ['flat', 'house', 'bungalo'];
 var timesCheck = ['12:00', '13:00', '14:00'];
 var featuresValues = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var similarAds = [];
-var titles = [];
+var similarAds = []; // массив со всеми объявлениями
+var titles = []; // массив со всеми названиями жилищ
 var minPrice = 1000;
 var maxPrice = 1000000;
 var minRoomsAmount = 1;
@@ -33,30 +33,33 @@ var minValueY = 100;
 var maxValueY = 500;
 
 var map = document.querySelector('.map');
-var fragment = document.createDocumentFragment();
+var fragmentAd = document.createDocumentFragment();
+var fragmentPin = document.createDocumentFragment();
 var template = document.querySelector('template').content;
 var mapPins = document.querySelector('.map__pins');
-var mapPin = template.querySelector('.map__pin');
+var mapPinTemplate = template.querySelector('.map__pin');
+var mapCardTemplate = template.querySelector('.map__card');
 var mapPinWidth = 46;
 var mapPinHeight = 62;
-var mapCard = template.querySelector('.map__card');
 var mapFilters = document.querySelector('.map__filters-container');
+
+var ESC_KEYCODE = 27;
 
 var generateNumber = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber)) + minNumber;
 };
 
 var generateFeature = function () {
-  var featuresList = [];
-  var featuresValuesWorking = featuresValues.slice();
-  featuresList.length = generateNumber(1, featuresValuesWorking.length);
+  var featuresList = []; // создаётся новый массив для преимуществ для каждого объявления
+  var featuresValuesWorking = featuresValues.slice(); // копируем возможные значения преимушеств, чтобы не портить изначальный массив, в "рабочий" массив
+  featuresList.length = generateNumber(1, featuresValuesWorking.length); // генерируем количество преимуществ
   for (var i = 0; i < featuresList.length; i++) {
-    var generationFeaturesIndex = generateNumber(0, featuresValuesWorking.length - 1);
-    var feature = featuresValuesWorking[generationFeaturesIndex];
-    featuresValuesWorking.splice(generationFeaturesIndex, 1);
-    featuresList.splice(i, 1, feature);
+    var generationFeaturesIndex = generateNumber(0, featuresValuesWorking.length - 1); // генерируем индекс, узнав текущую длину "рабочего" массива
+    var feature = featuresValuesWorking[generationFeaturesIndex]; // получаем преимущество с сгенерированным индексом
+    featuresValuesWorking.splice(generationFeaturesIndex, 1); // удаляем этот индекс из "рабочего" массива
+    featuresList.splice(i, 1, feature); // добавляем в массив вместо пустого значения полученное преимущество
   }
-  return featuresList;
+  return featuresList; // возвращаем список преимуществ для одного объявления
 };
 
 var generateUserId = function () {
@@ -71,13 +74,14 @@ var generateUserId = function () {
 
 var generateTitles = function () {
   while (titlesHouse.length > 0) {
-    var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1);
-    var title = titlesHouse[generationTitlesIndex];
-    titlesHouse.splice(generationTitlesIndex, 1);
-    titles.push(title);
+    var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1); // генерируем индекс названия жилища
+    var title = titlesHouse[generationTitlesIndex]; // берём сгенерированное название жилища по индексу
+    titlesHouse.splice(generationTitlesIndex, 1); // удаляем использованное название жилища из глобального массива
+    titles.push(title); // для каждого объявления случайно генерируем неповторяющиеся названия, поочередно добавляя их в массив названий жилищ
   }
 };
 
+// Генерируем само объявление, используя ранее сгенерированные объекты
 var generateAds = function () {
   var adsAmount = 8;
   for (var i = 0; i < adsAmount; i++) {
@@ -88,7 +92,7 @@ var generateAds = function () {
         avatar: 'img/avatars/user' + generateUserId() + '.png'
       },
       offer: {
-        title: titles[i],
+        title: titles[i], // из нового массива с названиями жилищ
         address: coordinateX + ', ' + coordinateY,
         price: generateNumber(minPrice, maxPrice),
         type: typesHouse[generateNumber(0, typesHouse.length - 1)],
@@ -105,12 +109,13 @@ var generateAds = function () {
         y: coordinateY
       }
     };
-    similarAds.push(adItem);
+    similarAds.push(adItem); // добавляем в массив сгенерированное объявление
   }
 };
 
+// Отрисовываем метки объявлений
 var renderPin = function (dataAd) {
-  var mapPinElement = mapPin.cloneNode(true);
+  var mapPinElement = mapPinTemplate.cloneNode(true);
   mapPinElement.style.left = (dataAd.location.x - mapPinWidth / 2) + 'px';
   mapPinElement.style.top = (dataAd.location.y - mapPinHeight) + 'px';
   mapPinElement.querySelector('img').src = dataAd.author.avatar;
@@ -130,6 +135,7 @@ var getTypeName = function (type) {
   return type;
 };
 
+// Получаем все значения "преимуществ"
 var getFeatureElements = function (features) {
   var featureElements = '';
   for (var i = 0; i <= features.length - 1; i++) {
@@ -138,8 +144,9 @@ var getFeatureElements = function (features) {
   return featureElements;
 };
 
+// Отрисовываем объявления
 var renderAd = function (dataAd) {
-  var adElement = mapCard.cloneNode(true);
+  var adElement = mapCardTemplate.cloneNode(true);
   adElement.querySelector('h3').textContent = dataAd.offer.title;
   adElement.querySelector('small').textContent = dataAd.offer.address;
   adElement.querySelector('.popup__price').innerHTML = dataAd.offer.price + ' &#x20bd;/ночь';
@@ -152,22 +159,121 @@ var renderAd = function (dataAd) {
   return adElement;
 };
 
+// Добавляем метки объявлений в фрагмент
 var addFragmentPin = function () {
   for (var i = 0; i < similarAds.length; i++) {
-    fragment.appendChild(renderPin(similarAds[i]));
+    fragmentPin.appendChild(renderPin(similarAds[i]));
   }
 };
 
+// Добавляем объявления в фрагмент
 var addFragmentAd = function () {
   for (var i = 0; i < similarAds.length; i++) {
-    fragment.appendChild(renderAd(similarAds[i]));
+    fragmentAd.appendChild(renderAd(similarAds[i]));
   }
 };
 
-map.classList.remove('map--faded');
 generateTitles();
 generateAds();
 addFragmentPin();
 addFragmentAd();
-mapPins.appendChild(fragment);
-map.insertBefore(fragment, mapFilters);
+
+
+/* --------------- Задание 2 ------------------ */
+
+var activeMapPin;
+var noticeForm = document.querySelector('.notice__form');
+var noticeFieldSet = noticeForm.querySelectorAll('fieldset');
+var mapPinMain = map.querySelector('.map__pin--main');
+
+var toFindCloseButton = function () {
+  var popupCloseButtons = map.querySelectorAll('.popup__close');
+  for (var i = 0; i < popupCloseButtons.length; i++) {
+    var popupCloseButton = popupCloseButtons[i];
+    popupCloseButton.addEventListener('click', function () {
+      hidePopup();
+      deactivateMapPins();
+    });
+  }
+};
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    hidePopup();
+    deactivateMapPins();
+  }
+};
+
+var disableField = function () {
+  for (var i = 0; i < noticeFieldSet.length; i++) {
+    noticeFieldSet[i].disabled = true;
+  }
+};
+
+var enableField = function () {
+  for (var i = 0; i < noticeFieldSet.length; i++) {
+    noticeFieldSet[i].disabled = false;
+  }
+};
+
+var onButtonMouseup = function () {
+  map.classList.remove('map--faded');
+  mapPins.appendChild(fragmentPin);
+  noticeForm.classList.remove('notice__form--disabled');
+  enableField();
+  map.insertBefore(fragmentAd, mapFilters);
+  hidePopup();
+  toFindCloseButton();
+  mapPinMain.removeEventListener('mouseup', onButtonMouseup);
+};
+
+var hidePopup = function () {
+  var mapCardItems = map.querySelectorAll('.map__card');
+  for (var i = 0; i < mapCardItems.length; i++) {
+    var mapCardItem = mapCardItems[i];
+    mapCardItem.classList.add('hidden');
+  }
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+var showPopup = function (index) {
+  var popup = map.querySelectorAll('.map__card');
+  hidePopup();
+  popup[index].classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var deactivateMapPins = function () {
+  var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < mapPinItems.length; i++) {
+    var mapPinItem = mapPinItems[i];
+    if (mapPinItem.classList.contains('map__pin--active')) {
+      mapPinItem.classList.remove('map__pin--active');
+    }
+  }
+};
+
+var getIndex = function (item) {
+  var children = item.parentNode.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < children.length; i++) {
+    if (children[i] === item) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+disableField();
+
+mapPinMain.addEventListener('mouseup', onButtonMouseup);
+
+mapPins.addEventListener('click', function (evt) {
+  var toFindTarget = evt.target.closest('.map__pin');
+  if (toFindTarget && !toFindTarget.classList.contains('map__pin--main')) {
+    deactivateMapPins();
+    activeMapPin = toFindTarget;
+    activeMapPin.classList.add('map__pin--active');
+    var activeIndex = getIndex(activeMapPin);
+    showPopup(activeIndex);
+  }
+});
