@@ -59,7 +59,7 @@ var generateFeature = function () {
     featuresValuesWorking.splice(generationFeaturesIndex, 1); // удаляем этот индекс из "рабочего" массива
     featuresList.splice(i, 1, feature); // добавляем в массив вместо пустого значения полученное преимущество
   }
-  return featuresList; //возвращаем список преимуществ для одного объявления
+  return featuresList; // возвращаем список преимуществ для одного объявления
 };
 
 var generateUserId = function () {
