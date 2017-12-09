@@ -277,3 +277,88 @@ mapPins.addEventListener('click', function (evt) {
     showPopup(activeIndex);
   }
 });
+
+/* ----------------------------Задание 3 -------------------------- */
+
+var titleField = noticeForm.querySelector('#title');
+var minLengthTitle = 30;
+var maxLengthTitle = 100;
+var timeinOption = noticeForm.querySelector('#timein');
+var timeoutOption = noticeForm.querySelector('#timeout');
+var typeOption = noticeForm.querySelector('#type');
+var priceField = noticeForm.querySelector('#price');
+var roomNumberOption = noticeForm.querySelector('#room_number');
+var capacityOption = noticeForm.querySelector('#capacity');
+var minPrices = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
+var onTimeinChange = function () {
+  timeinOption.value = timeoutOption.value;
+};
+
+var onTimeoutChange = function () {
+  timeoutOption.value = timeinOption.value;
+};
+
+var onTypeChange = function () {
+  priceField.min = minPrices[typeOption.value];
+};
+
+var onRoomChange = function () {
+  if (roomNumberOption.value === '100') {
+    capacityOption.value = '0';
+  } else {
+    capacityOption.value = roomNumberOption.value;
+  }
+};
+
+var addInvalidColor = function (field) {
+  field.style.border = '1px solid red';
+};
+
+var removeInvalidColor = function (field) {
+  field.style.border = '';
+};
+
+titleField.addEventListener('invalid', function (evt) {
+  addInvalidColor(titleField);
+  if (titleField.validity.tooShort) {
+    titleField.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
+  } else if (titleField.validity.tooLong) {
+    titleField.setCustomValidity('Заголовок объявления не может превышать ' + maxLengthTitle + ' символов');
+  } else if (titleField.validity.valueMissing) {
+    titleField.setCustomValidity('Поле не может быть пустым');
+  } else {
+    removeInvalidColor(titleField);
+    titleField.setCustomValidity('');
+  }
+});
+
+titleField.addEventListener('input', function (evt) {
+  if (evt.target.value.length < minLengthTitle) {
+    evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
+  } else {
+    evt.target.setCustomValidity('');
+  }
+});
+
+priceField.addEventListener('invalid', function (evt) {
+  addInvalidColor(priceField);
+  if (priceField.validity.rangeOverflow) {
+    priceField.setCustomValidity('Цена не может превышать' + priceField.max);
+  } else if (priceField.validity.rangeUnderflow) {
+    priceField.setCustomValidity('Цены на данный тип жилья начинаются с ' + priceField.min);
+  } else {
+    removeInvalidColor(priceField);
+    priceField.setCustomValidity('');
+  }
+});
+
+timeinOption.addEventListener('change', onTimeoutChange);
+timeoutOption.addEventListener('change', onTimeinChange);
+typeOption.addEventListener('change', onTypeChange);
+roomNumberOption.addEventListener('change', onRoomChange);
