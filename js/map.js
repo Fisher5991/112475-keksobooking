@@ -283,6 +283,7 @@ mapPins.addEventListener('click', function (evt) {
 var titleField = noticeForm.querySelector('#title');
 var minLengthTitle = 30;
 var maxLengthTitle = 100;
+var addressField = noticeForm.querySelector('#address');
 var timeinOption = noticeForm.querySelector('#timein');
 var timeoutOption = noticeForm.querySelector('#timeout');
 var typeOption = noticeForm.querySelector('#type');
@@ -325,6 +326,16 @@ var removeInvalidColor = function (field) {
   field.style.border = '';
 };
 
+/* var onAddressFieldInvalid = function () {
+  addInvalidColor(titleField);
+  if (addressField.validity.valueMissing) {
+    addressField.setCustomValidity('Перетащите метку, чтобы выбрать адрес');
+  } else {
+    removeInvalidColor(titleField);
+    titleField.setCustomValidity('');
+  }
+} */
+
 var onTitleFieldInvalid = function () {
   addInvalidColor(titleField);
   if (titleField.validity.tooShort) {
@@ -337,7 +348,15 @@ var onTitleFieldInvalid = function () {
     removeInvalidColor(titleField);
     titleField.setCustomValidity('');
   }
-}
+};
+
+var onTitleFieldInput = function (evt) {
+  if (evt.target.value.length < minLengthTitle) {
+    evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
+  } else {
+    evt.target.setCustomValidity('');
+  }
+};
 
 var onPriceFieldInvalid = function () {
   addInvalidColor(priceField);
@@ -351,20 +370,48 @@ var onPriceFieldInvalid = function () {
   }
 };
 
-var onTitleFieldInput = function (evt) {
-  if (evt.target.value.length < minLengthTitle) {
-    evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
-  } else {
-    evt.target.setCustomValidity('');
-  }
-};
-
 var onFormButtonMouseup = function () {
+  /* addressField.addEventListener('invalid', onAddressFieldInvalid); */
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   titleField.addEventListener('input', onTitleFieldInput);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
-}
+};
 
+var remapMinPrice = function () {
+  for (var i = 0; i < typeOption.options.length; i++) {
+    var typeOptionElement = typeOption.options[i];
+    if (typeOptionElement.selected === true) {
+      priceField.min = minPrices[typeOptionElement.value];
+    }
+  }
+};
+
+var toFindCapacitySelected = function () {
+  for (var i = 0; i < capacityOption.options.length; i++) {
+    var capacityOptionElement = capacityOption.options[i];
+    if (capacityOptionElement.selected === true) {
+      capacityOptionElement.selected === false;
+    }
+  }
+};
+
+var remapCapacitySelected = function () {
+  for (var i = 0; i < roomNumberOption.options.length; i++) {
+    var roomNumberOptionElement = roomNumberOption.options[i];
+    if (roomNumberOptionElement.selected === true) {
+      var defaultValue = roomNumberOptionElement.value;
+      toFindCapacitySelected();
+      if (defaultValue === '100') {
+        capacityOption.value = '0';
+      } else {
+        capacityOption.value = defaultValue;
+      }
+    }
+  }
+};
+
+remapCapacitySelected();
+remapMinPrice();
 timeinOption.addEventListener('change', onTimeoutChange);
 timeoutOption.addEventListener('change', onTimeinChange);
 typeOption.addEventListener('change', onTypeChange);
