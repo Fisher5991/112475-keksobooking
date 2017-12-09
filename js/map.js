@@ -283,7 +283,7 @@ mapPins.addEventListener('click', function (evt) {
 var titleField = noticeForm.querySelector('#title');
 var minLengthTitle = 30;
 var maxLengthTitle = 100;
-var addressField = noticeForm.querySelector('#address');
+/* var addressField = noticeForm.querySelector('#address'); */
 var timeinOption = noticeForm.querySelector('#timein');
 var timeoutOption = noticeForm.querySelector('#timeout');
 var typeOption = noticeForm.querySelector('#type');
@@ -390,7 +390,7 @@ var toFindCapacitySelected = function () {
   for (var i = 0; i < capacityOption.options.length; i++) {
     var capacityOptionElement = capacityOption.options[i];
     if (capacityOptionElement.selected === true) {
-      capacityOptionElement.selected === false;
+      capacityOptionElement.selected = false;
     }
   }
 };
