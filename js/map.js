@@ -311,11 +311,7 @@ var onTypeChange = function () {
 };
 
 var onRoomChange = function () {
-  if (roomNumberOption.value === '100') {
-    capacityOption.value = '0';
-  } else {
-    capacityOption.value = roomNumberOption.value;
-  }
+  capacityOption.value = roomNumberOption.value === '100' ? '0' : roomNumberOption.value;
 };
 
 var addInvalidColor = function (field) {
@@ -401,11 +397,7 @@ var remapCapacitySelected = function () {
     if (roomNumberOptionElement.selected === true) {
       var defaultValue = roomNumberOptionElement.value;
       toFindCapacitySelected();
-      if (defaultValue === '100') {
-        capacityOption.value = '0';
-      } else {
-        capacityOption.value = defaultValue;
-      }
+      capacityOption.value = defaultValue === '100' ? '0' : defaultValue;
     }
   }
 };
