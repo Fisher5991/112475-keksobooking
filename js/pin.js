@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
   var template = document.querySelector('template').content;
   var mapPinTemplate = template.querySelector('.map__pin');
@@ -58,5 +57,5 @@
         }
       }
     }
-  }
+  };
 })();

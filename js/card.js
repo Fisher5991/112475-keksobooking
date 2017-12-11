@@ -53,5 +53,5 @@
       popup[index].classList.remove('hidden');
       document.addEventListener('keydown', onPopupEscPress);
     }
-  }
+  };
 })();

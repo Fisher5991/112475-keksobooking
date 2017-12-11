@@ -96,15 +96,6 @@
     priceField.addEventListener('invalid', onPriceFieldInvalid);
   };
 
-  var remapMinPrice = function () {
-    for (var i = 0; i < typeOption.options.length; i++) {
-      var typeOptionElement = typeOption.options[i];
-      if (typeOptionElement.selected === true) {
-        priceField.min = minPrices[typeOptionElement.value];
-      }
-    }
-  };
-
   var toFindCapacitySelected = function () {
     for (var i = 0; i < capacityOption.options.length; i++) {
       var capacityOptionElement = capacityOption.options[i];
@@ -114,7 +105,16 @@
     }
   };
 
-  var remapCapacitySelected = function () {
+  (function () {
+    for (var i = 0; i < typeOption.options.length; i++) {
+      var typeOptionElement = typeOption.options[i];
+      if (typeOptionElement.selected === true) {
+        priceField.min = minPrices[typeOptionElement.value];
+      }
+    }
+  })();
+
+  (function () {
     for (var i = 0; i < roomNumberOption.options.length; i++) {
       var roomNumberOptionElement = roomNumberOption.options[i];
       if (roomNumberOptionElement.selected === true) {
@@ -123,15 +123,12 @@
         capacityOption.value = defaultValue === '100' ? '0' : defaultValue;
       }
     }
-  };
+  })();
 
-  remapCapacitySelected();
-  remapMinPrice();
   timeinOption.addEventListener('change', onTimeoutChange);
   timeoutOption.addEventListener('change', onTimeinChange);
   typeOption.addEventListener('change', onTypeChange);
   roomNumberOption.addEventListener('change', onRoomChange);
-
   formButton.addEventListener('mouseup', onFormButtonMouseup);
 
   window.adsForm = {
@@ -146,5 +143,5 @@
         noticeFieldSet[i].disabled = false;
       }
     }
-  }
+  };
 })();

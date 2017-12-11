@@ -56,15 +56,6 @@
     return userId;
   };
 
-  var generateTitles = function () {
-    while (titlesHouse.length > 0) {
-      var generationTitlesIndex = generateNumber(0, titlesHouse.length - 1); // генерируем индекс названия жилища
-      var title = titlesHouse[generationTitlesIndex]; // берём сгенерированное название жилища по индексу
-      titlesHouse.splice(generationTitlesIndex, 1); // удаляем использованное название жилища из глобального массива
-      titles.push(title); // для каждого объявления случайно генерируем неповторяющиеся названия, поочередно добавляя их в массив названий жилищ
-    }
-  };
-
   // Генерируем само объявление, используя ранее сгенерированные объекты
   var generateAds = function () {
     var adsAmount = 8;
@@ -98,6 +89,15 @@
     return similarAds;
   };
 
+  (function () {
+    while (titlesHouse.length > 0) {
+      var generationTitlesIndex = window.generateNumber(0, titlesHouse.length - 1); // генерируем индекс названия жилища
+      var title = titlesHouse[generationTitlesIndex]; // берём сгенерированное название жилища по индексу
+      titlesHouse.splice(generationTitlesIndex, 1); // удаляем использованное название жилища из глобального массива
+      titles.push(title); // для каждого объявления случайно генерируем неповторяющиеся названия, поочередно добавляя их в массив названий жилищ
+    }
+  })();
+
   window.data = {
     similarAds: generateAds(),
 
@@ -121,5 +121,5 @@
       }
       return featureElements;
     }
-  }
+  };
 })();
