@@ -6,7 +6,6 @@
   var titleField = noticeForm.querySelector('#title');
   var minLengthTitle = 30;
   var maxLengthTitle = 100;
-  /* var addressField = noticeForm.querySelector('#address'); */
   var timeinOption = noticeForm.querySelector('#timein');
   var timeoutOption = noticeForm.querySelector('#timeout');
   var typeOption = noticeForm.querySelector('#type');
@@ -45,16 +44,6 @@
     field.style.border = '';
   };
 
-  /* var onAddressFieldInvalid = function () {
-    addInvalidColor(titleField);
-    if (addressField.validity.valueMissing) {
-      addressField.setCustomValidity('Перетащите метку, чтобы выбрать адрес');
-    } else {
-      removeInvalidColor(titleField);
-      titleField.setCustomValidity('');
-    }
-  } */
-
   var onTitleFieldInvalid = function () {
     addInvalidColor(titleField);
     if (titleField.validity.tooShort) {
@@ -90,7 +79,6 @@
   };
 
   var onFormButtonMouseup = function () {
-    /* addressField.addEventListener('invalid', onAddressFieldInvalid); */
     titleField.addEventListener('invalid', onTitleFieldInvalid);
     titleField.addEventListener('input', onTitleFieldInput);
     priceField.addEventListener('invalid', onPriceFieldInvalid);
@@ -105,16 +93,16 @@
     }
   };
 
-  (function () {
+  var remapMinPrice = function () {
     for (var i = 0; i < typeOption.options.length; i++) {
       var typeOptionElement = typeOption.options[i];
       if (typeOptionElement.selected === true) {
         priceField.min = minPrices[typeOptionElement.value];
       }
     }
-  })();
+  };
 
-  (function () {
+  var remapCapacitySelected = function () {
     for (var i = 0; i < roomNumberOption.options.length; i++) {
       var roomNumberOptionElement = roomNumberOption.options[i];
       if (roomNumberOptionElement.selected === true) {
@@ -123,7 +111,10 @@
         capacityOption.value = defaultValue === '100' ? '0' : defaultValue;
       }
     }
-  })();
+  };
+
+  remapMinPrice();
+  remapCapacitySelected();
 
   timeinOption.addEventListener('change', onTimeoutChange);
   timeoutOption.addEventListener('change', onTimeinChange);
