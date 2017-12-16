@@ -12,7 +12,7 @@
     for (var i = 0; i < popupCloseButtons.length; i++) {
       var popupCloseButton = popupCloseButtons[i];
       popupCloseButton.addEventListener('click', function () {
-        window.card.hidePopup();
+        window.card.hideCard();
         window.pin.deactivateMapPins();
       });
     }
@@ -24,7 +24,7 @@
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
     map.insertBefore(window.card.fragmentCard, mapFilters);
-    window.card.hidePopup();
+    window.card.hideCard();
     toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };

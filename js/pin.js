@@ -41,7 +41,7 @@
       activeMapPin = toFindTarget;
       activeMapPin.classList.add('map__pin--active');
       var activeIndex = getIndex(activeMapPin);
-      window.card.showPopup(activeIndex);
+      window.showCard(activeIndex);
     }
   });
 
