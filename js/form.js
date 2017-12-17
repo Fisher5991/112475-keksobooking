@@ -13,6 +13,7 @@
   var roomNumberOption = noticeForm.querySelector('#room_number');
   var capacityOption = noticeForm.querySelector('#capacity');
   var formButton = noticeForm.querySelector('.form__submit');
+  var timesCheck = ['12:00', '13:00', '14:00'];
   var minPrices = {
     bungalo: '0',
     flat: '1000',
@@ -20,20 +21,48 @@
     palace: '10000'
   };
 
+  var numberGuests = {
+    1: '1',
+    2: '2',
+    3: '3',
+    100: '0'
+  };
+
+  var typeOptionValues = Object.keys(minPrices);
+  var roomNumberOptionValues = Object.keys(numberGuests);
+  var priceFieldValues = [];
+  var capacityOptionValues = [];
+
+
+  var getValues = function (keys, values, object) {
+    for (var i = 0; i < keys.length; i++) {
+      values.push(object[keys[i]]);
+    }
+    return values;
+  };
+
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
+
+  var syncValueWithMin = function (element, value) {
+    element.min = value;
+  };
+
   var onTimeinChange = function () {
-    timeinOption.value = timeoutOption.value;
+    window.synchronizeFields(timeinOption, timeoutOption, timesCheck, timesCheck, syncValues);
   };
 
   var onTimeoutChange = function () {
-    timeoutOption.value = timeinOption.value;
+    window.synchronizeFields(timeoutOption, timeinOption, timesCheck, timesCheck, syncValues);
   };
 
   var onTypeChange = function () {
-    priceField.min = minPrices[typeOption.value];
+    window.synchronizeFields(priceField, typeOption, getValues(typeOptionValues, priceFieldValues, minPrices), typeOptionValues, syncValueWithMin);
   };
 
   var onRoomChange = function () {
-    capacityOption.value = roomNumberOption.value === '100' ? '0' : roomNumberOption.value;
+    window.synchronizeFields(capacityOption, roomNumberOption, getValues(roomNumberOptionValues, capacityOptionValues, numberGuests), roomNumberOptionValues, syncValues);
   };
 
   var addInvalidColor = function (field) {
