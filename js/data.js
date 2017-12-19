@@ -99,7 +99,6 @@
   })();
 
   window.data = {
-    similarAds: generateAds(),
 
     getTypeName: function (type) {
       if (type === typesHouse[0]) {

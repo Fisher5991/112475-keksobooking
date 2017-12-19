@@ -17,9 +17,9 @@
     return mapPinElement;
   };
 
-  var addFragmentPin = function () {
-    for (var i = 0; i < window.data.similarAds.length; i++) {
-      fragmentPin.appendChild(renderPin(window.data.similarAds[i]));
+  var addFragmentPin = function (similarAds) {
+    for (var i = 0; i < similarAds.length; i++) {   /* */
+      fragmentPin.appendChild(renderPin(similarAds[i]));
     }
     return fragmentPin;
   };
@@ -46,7 +46,7 @@
   });
 
   window.pin = {
-    fragmentPin: addFragmentPin(),
+    fragmentPin: addFragmentPin,/* */
 
     deactivateMapPins: function () {
       var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
