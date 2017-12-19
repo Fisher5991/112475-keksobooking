@@ -2,6 +2,7 @@
 
 (function () {
   var URL = 'https://1510.dump.academy/keksobooking';
+  var STATUS_OK_CODE = 200;
   var fragmentPin = document.createDocumentFragment();
 
   var configure = function (onSuccess, onError) {
@@ -9,8 +10,8 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onSuccess(xhr.response);
+      if (xhr.status === STATUS_OK_CODE) {
+        onSuccess(xhr.response, window.card.cb);
       } else {
         onError('Неизвестный статус: ' + xhr.status);
       }

@@ -5,7 +5,9 @@
   var map = document.querySelector('.map');
   var template = document.querySelector('template').content;
   var mapCardTemplate = template.querySelector('.map__card');
+  var mapFilters = document.querySelector('.map__filters-container');
   var fragmentCard = document.createDocumentFragment();
+  var mapPins = document.querySelector('.map__pins');
 
   var renderAd = function (dataAd) {
     var adElement = mapCardTemplate.cloneNode(true);
@@ -15,18 +17,20 @@
     adElement.querySelector('h4').textContent = window.data.getTypeName(dataAd.offer.type);
     adElement.querySelector('h4 + p').textContent = dataAd.offer.rooms + ' для ' + dataAd.offer.guests + ' гостей';
     adElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + dataAd.offer.checkin + ', выезд до ' + dataAd.offer.checkout;
-    adElement.querySelector('.popup__features').innerHTML = dataAd.offer.features;
+    adElement.querySelector('.popup__features').innerHTML = window.data.getFeatureElements(dataAd.offer.features);
     adElement.querySelector('.popup__features + p').textContent = dataAd.offer.description;
     adElement.querySelector('.popup__avatar').src = dataAd.author.avatar;
     return adElement;
   };
 
-  var successHandler = function (similarAds) {
+  var successHandler = function (similarAds, cb) {
     debugger;
+    window.pin.addFragmentPin (similarAds);
+
     for (var i = 0; i < similarAds.length; i++) {
       fragmentCard.appendChild(renderAd(similarAds[i]));
     }
-    return fragmentCard;
+    cb(fragmentCard);
   };
 
   var errorHandler = function (errorMessage) {
@@ -43,8 +47,13 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  window.backend.load(successHandler, errorHandler);
+
   window.card = {
-    fragmentCard: window.backend.load(successHandler, errorHandler),
+    cb: function (frag) {
+      map.insertBefore(frag, mapFilters);
+      window.card.hideCard();
+    },
 
     hideCard: function () {
       var mapCardItems = map.querySelectorAll('.map__card');

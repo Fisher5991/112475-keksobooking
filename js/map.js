@@ -3,7 +3,6 @@
 (function () {
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
-  var mapFilters = document.querySelector('.map__filters-container');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = map.querySelector('.map__pin--main');
 
@@ -20,11 +19,8 @@
 
   var onButtonMouseup = function () {
     map.classList.remove('map--faded');
-    mapPins.appendChild(window.pin.fragmentPin);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
-    map.insertBefore(window.card.fragmentCard, mapFilters);
-    window.card.hideCard();
     toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };
