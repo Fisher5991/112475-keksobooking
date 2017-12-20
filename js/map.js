@@ -2,7 +2,6 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mapPins = document.querySelector('.map__pins');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = map.querySelector('.map__pin--main');
 
@@ -19,8 +18,11 @@
 
   var onButtonMouseup = function () {
     map.classList.remove('map--faded');
+    window.backend.load(window.statusHandler.successHandler, window.statusHandler.errorHandler);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
+    mapPinMain.style.left = '600px';
+    mapPinMain.style.top = '375px';
     toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };

@@ -3,7 +3,6 @@
 (function () {
   var URL = 'https://1510.dump.academy/keksobooking';
   var STATUS_OK_CODE = 200;
-  var fragmentPin = document.createDocumentFragment();
 
   var configure = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -31,7 +30,7 @@
   };
 
   window.backend = {
-    save: function (data, onSuccess, onError) {
+    publish: function (data, onSuccess, onError) {
       var xhr = configure(onSuccess, onError);
       xhr.open('POST', URL);
       xhr.send(data);

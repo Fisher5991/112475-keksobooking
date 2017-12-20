@@ -142,6 +142,13 @@
     }
   };
 
+  var onFormSubmit = function (evt) {
+    window.backend.publish(new FormData(noticeForm), function () {
+
+    }, window.statusHandler.errorHandler);
+    evt.preventDefault();
+  };
+
   remapMinPrice();
   remapCapacitySelected();
 
@@ -150,6 +157,7 @@
   typeOption.addEventListener('change', onTypeChange);
   roomNumberOption.addEventListener('change', onRoomChange);
   formButton.addEventListener('mouseup', onFormButtonMouseup);
+  noticeForm.addEventListener('submit', onFormSubmit);
 
   window.adsForm = {
     disableField: function () {

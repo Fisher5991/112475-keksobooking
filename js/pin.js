@@ -39,9 +39,9 @@
   });
 
   window.pin = {
-    addFragmentPin: function (similarAds) {
-      for (var i = 0; i < similarAds.length; i++) {
-        fragmentPin.appendChild(renderPin(similarAds[i]));
+    addFragmentPin: function (data) {
+      for (var i = 0; i < data.length; i++) {
+        fragmentPin.appendChild(renderPin(data[i]));
       }
       mapPins.appendChild(fragmentPin);
     },
