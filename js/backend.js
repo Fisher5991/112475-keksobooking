@@ -10,7 +10,7 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_OK_CODE) {
-        onSuccess(xhr.response, window.card.cb);
+        onSuccess(xhr.response, window.card.insertFragment);
       } else {
         onError('Неизвестный статус: ' + xhr.status);
       }

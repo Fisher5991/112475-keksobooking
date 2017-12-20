@@ -21,8 +21,6 @@
     window.backend.load(window.statusHandler.successHandler, window.statusHandler.errorHandler);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
-    mapPinMain.style.left = '600px';
-    mapPinMain.style.top = '375px';
     toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };

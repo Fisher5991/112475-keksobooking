@@ -24,7 +24,7 @@
 
     fragmentCard: document.createDocumentFragment(),
 
-    cb: function (frag) {
+    insertFragment: function (frag) {
       map.insertBefore(frag, mapFilters);
       window.card.hideCard();
     },
