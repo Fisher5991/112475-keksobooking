@@ -2,10 +2,9 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mapPins = document.querySelector('.map__pins');
-  var mapFilters = document.querySelector('.map__filters-container');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = map.querySelector('.map__pin--main');
+  var addressField = noticeForm.querySelector('#address');
 
   var toFindCloseButton = function () {
     var popupCloseButtons = map.querySelectorAll('.popup__close');
@@ -20,11 +19,9 @@
 
   var onButtonMouseup = function () {
     map.classList.remove('map--faded');
-    mapPins.appendChild(window.pin.fragmentPin);
+    window.backend.load(window.statusHandler.successHandler, window.statusHandler.errorHandler);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
-    map.insertBefore(window.card.fragmentCard, mapFilters);
-    window.card.hideCard();
     toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };
@@ -38,8 +35,6 @@
   var BOUND_TOP = 100;
   var BOUND_BOTTOM = 500;
 
-  var addressField = noticeForm.querySelector('#address');
-
   var onMapPinMainMouseDown = function (evt) {
 
     evt.preventDefault();
@@ -49,8 +44,11 @@
       y: evt.clientY
     };
 
+    var dragged = false;
+
     var onMapPinMainMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+      dragged = true;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -77,6 +75,11 @@
       var addressX = parseInt(mapPinMain.style.left, 10);
       var addressY = parseInt(mapPinMain.style.top, 10) + MAP_PIN_MAIN_HEIGHT / 2 + PIN_POINTER_HEIGHT;
       upEvt.preventDefault();
+      if (dragged === false) {
+        addressField.value = 'x: 600, y: 429';
+        document.removeEventListener('mouseup', onMapPinMainMouseUp);
+        return;
+      }
       addressField.value = 'x: ' + addressX + ', y: ' + addressY;
       document.removeEventListener('mousemove', onMapPinMainMouseMove);
       document.removeEventListener('mouseup', onMapPinMainMouseUp);

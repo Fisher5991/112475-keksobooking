@@ -1,9 +1,12 @@
 'use strict';
 
 (function () {
+  var map = document.querySelector('.map');
+  var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
   var noticeFieldSet = noticeForm.querySelectorAll('fieldset');
   var titleField = noticeForm.querySelector('#title');
+  var addressField = noticeForm.querySelector('#address');
   var minLengthTitle = 30;
   var maxLengthTitle = 100;
   var timeinOption = noticeForm.querySelector('#timein');
@@ -12,6 +15,9 @@
   var priceField = noticeForm.querySelector('#price');
   var roomNumberOption = noticeForm.querySelector('#room_number');
   var capacityOption = noticeForm.querySelector('#capacity');
+  var featuresFieldset = noticeForm.querySelector('.features');
+  var featureElements = featuresFieldset.querySelectorAll('input');
+  var descriptionField = noticeForm.querySelector('#description');
   var formButton = noticeForm.querySelector('.form__submit');
   var timesCheck = ['12:00', '13:00', '14:00'];
   var minPrices = {
@@ -28,11 +34,22 @@
     100: '0'
   };
 
+  var defaultValues = {
+    titleValue: '',
+    mapPinMainLeft: '600px',
+    mapPinMainTop: '375px',
+    addressValue: 'x: 600, y: 429',
+    priceValue: '1000',
+    typeValue: 'flat',
+    timeinValue: '12:00',
+    roomNumberValue: '1',
+    descriptionValue: ''
+  };
+
   var typeOptionValues = Object.keys(minPrices);
   var roomNumberOptionValues = Object.keys(numberGuests);
   var priceFieldValues = [];
   var capacityOptionValues = [];
-
 
   var getValues = function (keys, values, object) {
     for (var i = 0; i < keys.length; i++) {
@@ -142,6 +159,31 @@
     }
   };
 
+  var restoreForm = function () {
+    titleField.value = defaultValues.titleValue;
+    mapPinMain.style.left = defaultValues.mapPinMainLeft;
+    mapPinMain.style.top = defaultValues.mapPinMainTop;
+    addressField.value = defaultValues.addressValue;
+    priceField.value = defaultValues.priceValue;
+    typeOption.value = defaultValues.typeValue;
+    timeinOption.value = defaultValues.timeinValue;
+    roomNumberOption.value = defaultValues.roomNumberValue;
+    descriptionField.value = defaultValues.descriptionValue;
+    for (var i = 0; i < featureElements.length; i++) {
+      featureElements[i].checked = false;
+    }
+    window.synchronizeFields(timeoutOption, timeinOption, timesCheck, timesCheck, syncValues);
+    window.synchronizeFields(capacityOption, roomNumberOption, getValues(roomNumberOptionValues, capacityOptionValues, numberGuests), roomNumberOptionValues, syncValues);
+    window.synchronizeFields(priceField, typeOption, getValues(typeOptionValues, priceFieldValues, minPrices), typeOptionValues, syncValueWithMin);
+  };
+
+  var onFormSubmit = function (evt) {
+    window.backend.publish(new FormData(noticeForm), function () {
+      restoreForm();
+    }, window.statusHandler.errorHandler);
+    evt.preventDefault();
+  };
+
   remapMinPrice();
   remapCapacitySelected();
 
@@ -150,6 +192,7 @@
   typeOption.addEventListener('change', onTypeChange);
   roomNumberOption.addEventListener('change', onRoomChange);
   formButton.addEventListener('mouseup', onFormButtonMouseup);
+  noticeForm.addEventListener('submit', onFormSubmit);
 
   window.adsForm = {
     disableField: function () {
@@ -162,6 +205,7 @@
       for (var i = 0; i < noticeFieldSet.length; i++) {
         noticeFieldSet[i].disabled = false;
       }
+      addressField.value = defaultValues.addressValue;
     }
   };
 })();
