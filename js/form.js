@@ -205,6 +205,7 @@
       for (var i = 0; i < noticeFieldSet.length; i++) {
         noticeFieldSet[i].disabled = false;
       }
+      addressField.value = defaultValues.addressValue;
     }
   };
 })();
