@@ -7,7 +7,6 @@
   var mapPinWidth = 46;
   var mapPinHeight = 62;
   var activeMapPin;
-  var fragmentPin = document.createDocumentFragment();
 
   var renderPin = function (dataAd) {
     var mapPinElement = mapPinTemplate.cloneNode(true);
@@ -27,6 +26,12 @@
     return -1;
   };
 
+  var removeMapPins = function (items) {
+    items.forEach(function (item) {
+      item.remove();
+    });
+  };
+
   mapPins.addEventListener('click', function (evt) {
     var toFindTarget = evt.target.closest('.map__pin');
     if (toFindTarget && !toFindTarget.classList.contains('map__pin--main')) {
@@ -40,9 +45,13 @@
 
   window.pin = {
     addFragmentPin: function (data) {
-      for (var i = 0; i < data.length; i++) {
+      var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
+      var fragmentPin = document.createDocumentFragment();
+      var mapPinAmount = data.length > 5 ? 5 : data.length;
+      for (var i = 0; i < mapPinAmount; i++) {
         fragmentPin.appendChild(renderPin(data[i]));
       }
+      removeMapPins(mapPinItems);
       mapPins.appendChild(fragmentPin);
     },
 

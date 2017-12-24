@@ -1,14 +1,17 @@
 'use strict';
 
 (function () {
-  window.statusHandler = {
-    successHandler: function (similarAds, cb) {
-      window.pin.addFragmentPin(similarAds);
+  var cards = [];
+  var cardsWorking = [];
+  var updateAds = function (newCards) {
+    window.render(newCards);
+  };
 
-      for (var i = 0; i < similarAds.length; i++) {
-        window.card.fragmentCard.appendChild(window.card.renderAd(similarAds[i]));
-      }
-      cb(window.card.fragmentCard);
+  window.statusHandler = {
+    successHandler: function (similarAds) {
+      cards = similarAds;
+      cardsWorking = cards.slice();
+      updateAds(cardsWorking);
     },
 
     errorHandler: function (errorMessage) {
@@ -25,4 +28,28 @@
       document.body.insertAdjacentElement('afterbegin', node);
     }
   };
+
+  /* ----------------------- Последнее задание ----------------------- */
+  var mapFiltersForm = document.querySelector('.map__filters');
+  var housingType = mapFiltersForm.querySelector('#housing-type');
+  /* var housingPrice = mapFiltersForm.querySelector('#housing-price');
+  var housingRooms = mapFiltersForm.querySelector('#housing-rooms');
+  var housingGuests = mapFiltersForm.querySelector('#housing-guests');
+  var housingFeatures = mapFiltersForm.querySelector('#housing-features'); */
+
+  var filtrate = function () {
+    var selectFilter = function (filterItem) {
+      if (filterItem.value !== 'any') {
+        cardsWorking = cards.filter(function (card) {
+          return card.offer.type === filterItem.value;
+        });
+      }
+    };
+    selectFilter(housingType);
+    return cardsWorking;
+  };
+
+  mapFiltersForm.addEventListener('change', function () {
+    updateAds(filtrate());
+  });
 })();

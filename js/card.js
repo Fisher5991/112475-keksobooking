@@ -7,6 +7,12 @@
   var mapCardTemplate = template.querySelector('.map__card');
   var mapFilters = document.querySelector('.map__filters-container');
 
+  var removeMapCards = function (items) {
+    items.forEach(function (item) {
+      item.remove();
+    });
+  };
+
   window.card = {
     renderAd: function (dataAd) {
       var adElement = mapCardTemplate.cloneNode(true);
@@ -22,9 +28,9 @@
       return adElement;
     },
 
-    fragmentCard: document.createDocumentFragment(),
-
     insertFragment: function (frag) {
+      var mapCardItems = map.querySelectorAll('.map__card');
+      removeMapCards(mapCardItems);
       map.insertBefore(frag, mapFilters);
       window.card.hideCard();
     },
