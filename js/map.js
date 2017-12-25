@@ -6,23 +6,11 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var addressField = noticeForm.querySelector('#address');
 
-  var toFindCloseButton = function () {
-    var popupCloseButtons = map.querySelectorAll('.popup__close');
-    for (var i = 0; i < popupCloseButtons.length; i++) {
-      var popupCloseButton = popupCloseButtons[i];
-      popupCloseButton.addEventListener('click', function () {
-        window.card.hideCard();
-        window.pin.deactivateMapPins();
-      });
-    }
-  };
-
   var onButtonMouseup = function () {
     map.classList.remove('map--faded');
-    window.backend.load(window.statusHandler.successHandler, window.statusHandler.errorHandler);
+    window.backend.load(window.updatingData.successHandler, window.updatingData.errorHandler);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
-    toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };
 

@@ -6,6 +6,7 @@
   var mapPinTemplate = template.querySelector('.map__pin');
   var mapPinWidth = 46;
   var mapPinHeight = 62;
+  var maxAmountPin = 5;
   var activeMapPin;
 
   var renderPin = function (dataAd) {
@@ -47,7 +48,7 @@
     addFragmentPin: function (data) {
       var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
       var fragmentPin = document.createDocumentFragment();
-      var mapPinAmount = data.length > 5 ? 5 : data.length;
+      var mapPinAmount = data.length > maxAmountPin ? maxAmountPin : data.length;
       for (var i = 0; i < mapPinAmount; i++) {
         fragmentPin.appendChild(renderPin(data[i]));
       }
