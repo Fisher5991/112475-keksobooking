@@ -2,27 +2,22 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var RUBLE_SYMBOL = '\u20BD';
   var map = document.querySelector('.map');
   var template = document.querySelector('template').content;
   var mapCardTemplate = template.querySelector('.map__card');
   var mapFilters = document.querySelector('.map__filters-container');
-
-  var removeMapCards = function (items) {
-    items.forEach(function (item) {
-      item.remove();
-    });
-  };
 
   window.card = {
     renderAd: function (dataAd) {
       var adElement = mapCardTemplate.cloneNode(true);
       adElement.querySelector('h3').textContent = dataAd.offer.title;
       adElement.querySelector('small').textContent = dataAd.offer.address;
-      adElement.querySelector('.popup__price').innerHTML = dataAd.offer.price + ' &#x20bd;/ночь';
+      adElement.querySelector('.popup__price').textContent = dataAd.offer.price + ' ' + RUBLE_SYMBOL + '/ночь';
       adElement.querySelector('h4').textContent = window.data.getTypeName(dataAd.offer.type);
       adElement.querySelector('h4 + p').textContent = dataAd.offer.rooms + ' для ' + dataAd.offer.guests + ' гостей';
       adElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + dataAd.offer.checkin + ', выезд до ' + dataAd.offer.checkout;
-      adElement.querySelector('.popup__features').innerHTML = window.data.getFeatureElements(dataAd.offer.features);
+      adElement.querySelector('.popup__features').appendChild(window.data.getFeatureElements(adElement, dataAd.offer.features));
       adElement.querySelector('.popup__features + p').textContent = dataAd.offer.description;
       adElement.querySelector('.popup__avatar').src = dataAd.author.avatar;
       return adElement;
@@ -30,7 +25,7 @@
 
     insertFragment: function (frag) {
       var mapCardItems = map.querySelectorAll('.map__card');
-      removeMapCards(mapCardItems);
+      window.removeElements(mapCardItems);
       map.insertBefore(frag, mapFilters);
       window.card.hideCard();
     },

@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var MAP_PIN_MAIN_HEIGHT = 64;
+  var PIN_POINTER_HEIGHT = 22;
+  var BOUND_TOP = 100;
+  var BOUND_BOTTOM = 500;
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = map.querySelector('.map__pin--main');
@@ -13,15 +17,6 @@
     window.adsForm.enableField();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };
-
-  window.adsForm.disableField();
-
-  mapPinMain.addEventListener('mouseup', onButtonMouseup);
-
-  var MAP_PIN_MAIN_HEIGHT = 64;
-  var PIN_POINTER_HEIGHT = 22;
-  var BOUND_TOP = 100;
-  var BOUND_BOTTOM = 500;
 
   var onMapPinMainMouseDown = function (evt) {
 
@@ -75,5 +70,7 @@
     document.addEventListener('mouseup', onMapPinMainMouseUp);
   };
 
+  window.adsForm.disableField();
+  mapPinMain.addEventListener('mouseup', onButtonMouseup);
   mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 })();
