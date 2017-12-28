@@ -10,7 +10,7 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_OK_CODE) {
-        onSuccess(xhr.response, window.card.insertFragment);
+        onSuccess(xhr.response);
       } else {
         onError('Неизвестный статус: ' + xhr.status);
       }
@@ -21,7 +21,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
 
     xhr.timeout = 30000;

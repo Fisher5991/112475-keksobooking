@@ -1,39 +1,22 @@
 'use strict';
 
 (function () {
+  var MAP_PIN_MAIN_HEIGHT = 64;
+  var PIN_POINTER_HEIGHT = 22;
+  var BOUND_TOP = 100;
+  var BOUND_BOTTOM = 500;
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = map.querySelector('.map__pin--main');
   var addressField = noticeForm.querySelector('#address');
 
-  var toFindCloseButton = function () {
-    var popupCloseButtons = map.querySelectorAll('.popup__close');
-    for (var i = 0; i < popupCloseButtons.length; i++) {
-      var popupCloseButton = popupCloseButtons[i];
-      popupCloseButton.addEventListener('click', function () {
-        window.card.hideCard();
-        window.pin.deactivateMapPins();
-      });
-    }
-  };
-
   var onButtonMouseup = function () {
     map.classList.remove('map--faded');
-    window.backend.load(window.statusHandler.successHandler, window.statusHandler.errorHandler);
+    window.backend.load(window.updatingData.successHandler, window.updatingData.errorHandler);
     noticeForm.classList.remove('notice__form--disabled');
     window.adsForm.enableField();
-    toFindCloseButton();
     mapPinMain.removeEventListener('mouseup', onButtonMouseup);
   };
-
-  window.adsForm.disableField();
-
-  mapPinMain.addEventListener('mouseup', onButtonMouseup);
-
-  var MAP_PIN_MAIN_HEIGHT = 64;
-  var PIN_POINTER_HEIGHT = 22;
-  var BOUND_TOP = 100;
-  var BOUND_BOTTOM = 500;
 
   var onMapPinMainMouseDown = function (evt) {
 
@@ -75,12 +58,10 @@
       var addressX = parseInt(mapPinMain.style.left, 10);
       var addressY = parseInt(mapPinMain.style.top, 10) + MAP_PIN_MAIN_HEIGHT / 2 + PIN_POINTER_HEIGHT;
       upEvt.preventDefault();
+      addressField.value = 'x: ' + addressX + ', y: ' + addressY;
       if (dragged === false) {
         addressField.value = 'x: 600, y: 429';
-        document.removeEventListener('mouseup', onMapPinMainMouseUp);
-        return;
       }
-      addressField.value = 'x: ' + addressX + ', y: ' + addressY;
       document.removeEventListener('mousemove', onMapPinMainMouseMove);
       document.removeEventListener('mouseup', onMapPinMainMouseUp);
     };
@@ -89,5 +70,7 @@
     document.addEventListener('mouseup', onMapPinMainMouseUp);
   };
 
+  window.adsForm.disableField();
+  mapPinMain.addEventListener('mouseup', onButtonMouseup);
   mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 })();

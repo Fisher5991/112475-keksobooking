@@ -1,14 +1,23 @@
 'use strict';
 
 (function () {
-  window.statusHandler = {
-    successHandler: function (similarAds, cb) {
-      window.pin.addFragmentPin(similarAds);
+  var mapFiltersForm = document.querySelector('.map__filters');
+  var cards = [];
 
-      for (var i = 0; i < similarAds.length; i++) {
-        window.card.fragmentCard.appendChild(window.card.renderAd(similarAds[i]));
-      }
-      cb(window.card.fragmentCard);
+  var updateAds = function (newCards) {
+    window.render(newCards);
+  };
+
+  mapFiltersForm.addEventListener('change', function () {
+    window.debounce(function () {
+      updateAds(window.filtrate(cards));
+    });
+  });
+
+  window.updatingData = {
+    successHandler: function (similarAds) {
+      cards = similarAds;
+      updateAds(cards);
     },
 
     errorHandler: function (errorMessage) {
