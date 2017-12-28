@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var MAX_NUMBER_ROOMS = '100';
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
@@ -87,7 +88,7 @@
 
   var disableOptions = function () {
     for (var i = 0; i < numberGuestsOptions.length; i++) {
-      if (roomNumberOption.value === '100') {
+      if (roomNumberOption.value === MAX_NUMBER_ROOMS) {
         numberGuestsOptions[i].disabled = numberGuestsOptions[i].value !== numberGuests['100'];
       } else {
         numberGuestsOptions[i].disabled = numberGuestsOptions[i].value === numberGuests['100'] || numberGuestsOptions[i].value > roomNumberOption.value;
@@ -172,7 +173,7 @@
       if (roomNumberOptionElement.selected === true) {
         var defaultValue = roomNumberOptionElement.value;
         toFindCapacitySelected();
-        capacityOption.value = defaultValue === '100' ? '0' : defaultValue;
+        capacityOption.value = defaultValue === MAX_NUMBER_ROOMS ? '0' : defaultValue;
       }
     }
   };
