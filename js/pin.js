@@ -3,10 +3,10 @@
 (function () {
   var MAP_PIN_WIDTH = 46;
   var MAP_PIN_HEIGHT = 62;
+  var MAX_AMOUNT_PIN = 5;
   var mapPins = document.querySelector('.map__pins');
   var template = document.querySelector('template').content;
   var mapPinTemplate = template.querySelector('.map__pin');
-  var maxAmountPin = 5;
   var activeMapPin;
 
   var getPinData = function (dataAd) {
@@ -28,10 +28,10 @@
   };
 
   mapPins.addEventListener('click', function (evt) {
-    var toFindTarget = evt.target.closest('.map__pin');
-    if (toFindTarget && !toFindTarget.classList.contains('map__pin--main')) {
+    var actualPin = evt.target.closest('.map__pin');
+    if (actualPin && !actualPin.classList.contains('map__pin--main')) {
       window.pin.deactivateMapPins();
-      activeMapPin = toFindTarget;
+      activeMapPin = actualPin;
       activeMapPin.classList.add('map__pin--active');
       var activeIndex = getIndex(activeMapPin);
       window.showCard(activeIndex);
@@ -42,7 +42,7 @@
     addFragmentPin: function (data) {
       var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
       var fragmentPin = document.createDocumentFragment();
-      var mapPinAmount = data.length > maxAmountPin ? maxAmountPin : data.length;
+      var mapPinAmount = data.length > MAX_AMOUNT_PIN ? MAX_AMOUNT_PIN : data.length;
       for (var i = 0; i < mapPinAmount; i++) {
         fragmentPin.appendChild(getPinData(data[i]));
       }
@@ -51,12 +51,9 @@
     },
 
     deactivateMapPins: function () {
-      var mapPinItems = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var i = 0; i < mapPinItems.length; i++) {
-        var mapPinItem = mapPinItems[i];
-        if (mapPinItem.classList.contains('map__pin--active')) {
-          mapPinItem.classList.remove('map__pin--active');
-        }
+      var activePin = document.querySelector('.map__pin--active');
+      if (activePin) {
+        activePin.classList.remove('map__pin--active');
       }
     }
   };

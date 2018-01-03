@@ -2,6 +2,8 @@
 
 (function () {
   var MAX_NUMBER_ROOMS = '100';
+  var MIN_LENGTH_TITLE = 30;
+  var MAX_LENGTH_TITLE = 100;
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
@@ -20,8 +22,6 @@
   var descriptionField = noticeForm.querySelector('#description');
   var formButton = noticeForm.querySelector('.form__submit');
   var formReset = noticeForm.querySelector('.form__reset');
-  var minLengthTitle = 30;
-  var maxLengthTitle = 100;
   var timesCheck = ['12:00', '13:00', '14:00'];
   var minPrice = {
     bungalo: '0',
@@ -35,18 +35,6 @@
     2: '2',
     3: '3',
     100: '0'
-  };
-
-  var defaultValues = {
-    title: '',
-    mapPinMainLeft: '600px',
-    mapPinMainTop: '375px',
-    address: 'x: 600, y: 429',
-    price: '1000',
-    type: 'flat',
-    timein: '12:00',
-    roomNumber: '1',
-    description: ''
   };
 
   var typeOptionValues = Object.keys(minPrice);
@@ -107,9 +95,9 @@
   var onTitleFieldInvalid = function () {
     addInvalidColor(titleField);
     if (titleField.validity.tooShort) {
-      titleField.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
+      titleField.setCustomValidity('Заголовок объявления должен состоять из не менее ' + MIN_LENGTH_TITLE + ' символов');
     } else if (titleField.validity.tooLong) {
-      titleField.setCustomValidity('Заголовок объявления не может превышать ' + maxLengthTitle + ' символов');
+      titleField.setCustomValidity('Заголовок объявления не может превышать ' + MAX_LENGTH_TITLE + ' символов');
     } else if (titleField.validity.valueMissing) {
       titleField.setCustomValidity('Поле не может быть пустым');
     } else {
@@ -119,8 +107,8 @@
   };
 
   var onTitleFieldInput = function (evt) {
-    if (evt.target.value.length < minLengthTitle) {
-      evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + minLengthTitle + ' символов');
+    if (evt.target.value.length < MIN_LENGTH_TITLE) {
+      evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + MIN_LENGTH_TITLE + ' символов');
     } else {
       evt.target.setCustomValidity('');
     }
@@ -152,25 +140,20 @@
   var toFindCapacitySelected = function () {
     for (var i = 0; i < capacityOption.options.length; i++) {
       var capacityOptionElement = capacityOption.options[i];
-      if (capacityOptionElement.selected === true) {
+      if (capacityOptionElement.selected) {
         capacityOptionElement.selected = false;
       }
     }
   };
 
   var remapMinPrice = function () {
-    for (var i = 0; i < typeOption.options.length; i++) {
-      var typeOptionElement = typeOption.options[i];
-      if (typeOptionElement.selected === true) {
-        priceField.min = minPrice[typeOptionElement.value];
-      }
-    }
+    priceField.min = minPrice.flat;
   };
 
   var remapCapacitySelected = function () {
     for (var i = 0; i < roomNumberOption.options.length; i++) {
       var roomNumberOptionElement = roomNumberOption.options[i];
-      if (roomNumberOptionElement.selected === true) {
+      if (roomNumberOptionElement.selected) {
         var defaultValue = roomNumberOptionElement.value;
         toFindCapacitySelected();
         capacityOption.value = defaultValue === MAX_NUMBER_ROOMS ? '0' : defaultValue;
@@ -179,15 +162,15 @@
   };
 
   var restoreForm = function () {
-    titleField.value = defaultValues.title;
-    mapPinMain.style.left = defaultValues.mapPinMainLeft;
-    mapPinMain.style.top = defaultValues.mapPinMainTop;
-    addressField.value = defaultValues.address;
-    priceField.value = defaultValues.price;
-    typeOption.value = defaultValues.type;
-    timeinOption.value = defaultValues.timein;
-    roomNumberOption.value = defaultValues.roomNumber;
-    descriptionField.value = defaultValues.description;
+    titleField.value = window.adsForm.defaultValues.title;
+    mapPinMain.style.left = window.adsForm.defaultValues.mapPinMainLeft;
+    mapPinMain.style.top = window.adsForm.defaultValues.mapPinMainTop;
+    addressField.value = window.adsForm.defaultValues.address;
+    priceField.value = window.adsForm.defaultValues.price;
+    typeOption.value = window.adsForm.defaultValues.type;
+    timeinOption.value = window.adsForm.defaultValues.timein;
+    roomNumberOption.value = window.adsForm.defaultValues.roomNumber;
+    descriptionField.value = window.adsForm.defaultValues.description;
     for (var i = 0; i < featureElements.length; i++) {
       featureElements[i].checked = false;
     }
@@ -216,6 +199,18 @@
   noticeForm.addEventListener('submit', onFormSubmit);
 
   window.adsForm = {
+    defaultValues: {
+      title: '',
+      mapPinMainLeft: '600px',
+      mapPinMainTop: '375px',
+      address: 'x: 600, y: 429',
+      price: '1000',
+      type: 'flat',
+      timein: '12:00',
+      roomNumber: '1',
+      description: ''
+    },
+
     disableField: function () {
       for (var i = 0; i < noticeFieldSet.length; i++) {
         noticeFieldSet[i].disabled = true;

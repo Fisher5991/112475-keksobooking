@@ -3,6 +3,7 @@
 (function () {
   var URL = 'https://1510.dump.academy/keksobooking';
   var STATUS_OK_CODE = 200;
+  var TIMEOUT_VALUE = 30000;
 
   var configure = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -24,7 +25,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
 
-    xhr.timeout = 30000;
+    xhr.timeout = TIMEOUT_VALUE;
 
     return xhr;
   };

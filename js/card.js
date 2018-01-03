@@ -20,6 +20,7 @@
       adElement.querySelector('.popup__features').appendChild(window.data.getFeatureElements(adElement, dataAd.offer.features));
       adElement.querySelector('.popup__features + p').textContent = dataAd.offer.description;
       adElement.querySelector('.popup__avatar').src = dataAd.author.avatar;
+      adElement.querySelector('.popup__pictures').appendChild(window.data.getPhotos(adElement, dataAd.offer.photos));
       return adElement;
     },
 
