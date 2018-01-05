@@ -108,8 +108,10 @@
 
   var onTitleFieldInput = function (evt) {
     if (evt.target.value.length < MIN_LENGTH_TITLE) {
+      addInvalidColor(titleField);
       evt.target.setCustomValidity('Заголовок объявления должен состоять из не менее ' + MIN_LENGTH_TITLE + ' символов');
     } else {
+      removeInvalidColor(titleField);
       evt.target.setCustomValidity('');
     }
   };
