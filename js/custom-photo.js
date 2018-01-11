@@ -11,14 +11,26 @@
   var uploadPhoto = formPhotoContainer.querySelector('.upload');
 
   var onNoticePhotoChange = function () {
-    uploadFile(noticePhoto, noticePreview, checkNoticePhoto);
+    uploadFile(noticePhoto, noticePreview, acceptPhoto, insertNoticePhoto);
   };
 
   var onFormPhotoChange = function () {
-    uploadFile(formPhoto, formPhotoContainer, checkFormPhoto);
+    uploadFile(formPhoto, formPhotoContainer, acceptPhoto, insertFormPhoto);
   };
 
-  var uploadFile = function (filesPlace, preview, cb) {
+  var insertNoticePhoto = function (preview, reader) {
+    preview.src = reader.result;
+  };
+
+  var insertFormPhoto = function (preview, reader) {
+    var imageElement = document.createElement('img');
+    imageElement.src = reader.result;
+    imageElement.width = IMG_WIDTH;
+    imageElement.height = IMG_HEIGHT;
+    preview.insertBefore(imageElement, uploadPhoto);
+  };
+
+  var uploadFile = function (filesPlace, preview, acceptFile, cb) {
     for (var i = 0; i < filesPlace.files.length; i++) {
       var file = filesPlace.files[i];
       var fileName = file.name.toLowerCase();
@@ -26,29 +38,15 @@
         return fileName.endsWith(it);
       });
       if (matches) {
-        cb(preview, file);
+        acceptFile(preview, file, cb);
       }
     }
   };
 
-  var checkNoticePhoto = function (preview, file) {
+  var acceptPhoto = function (preview, file, cb) {
     var reader = new FileReader();
-
     reader.addEventListener('load', function () {
-      preview.src = reader.result;
-    });
-    reader.readAsDataURL(file);
-  };
-
-  var checkFormPhoto = function (preview, file) {
-    var reader = new FileReader();
-
-    reader.addEventListener('load', function () {
-      var imageElement = document.createElement('img');
-      imageElement.src = reader.result;
-      imageElement.width = IMG_WIDTH;
-      imageElement.height = IMG_HEIGHT;
-      preview.insertBefore(imageElement, uploadPhoto);
+      cb(preview, reader);
     });
     reader.readAsDataURL(file);
   };
