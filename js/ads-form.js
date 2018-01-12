@@ -4,6 +4,7 @@
   var MAX_NUMBER_ROOMS = '100';
   var MIN_LENGTH_TITLE = 30;
   var MAX_LENGTH_TITLE = 100;
+  var DEFAULT_AVATAR = 'img/muffin.png';
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
@@ -22,6 +23,7 @@
   var descriptionField = noticeForm.querySelector('#description');
   var formButton = noticeForm.querySelector('.form__submit');
   var formReset = noticeForm.querySelector('.form__reset');
+  var noticePreview = document.querySelector('.notice__preview img');
   var timesCheck = ['12:00', '13:00', '14:00'];
   var minPrice = {
     bungalo: '0',
@@ -164,6 +166,7 @@
   };
 
   var restoreForm = function () {
+    var formImages = document.querySelectorAll('.form__photo-container img');
     titleField.value = window.adsForm.defaultValues.title;
     mapPinMain.style.left = window.adsForm.defaultValues.mapPinMainLeft;
     mapPinMain.style.top = window.adsForm.defaultValues.mapPinMainTop;
@@ -176,6 +179,8 @@
     for (var i = 0; i < featureElements.length; i++) {
       featureElements[i].checked = false;
     }
+    noticePreview.src = DEFAULT_AVATAR;
+    window.removeElements(formImages);
     window.synchronizeFields(timeoutOption, timeinOption, timesCheck, timesCheck, syncValues);
     window.synchronizeFields(capacityOption, roomNumberOption, getValues(roomNumberOptionValues, capacityOptionValues, numberGuests), roomNumberOptionValues, syncValues);
     window.synchronizeFields(priceField, typeOption, getValues(typeOptionValues, priceFieldValues, minPrice), typeOptionValues, syncValueWithMin);
