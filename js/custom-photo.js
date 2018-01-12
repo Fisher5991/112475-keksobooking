@@ -30,9 +30,12 @@
     preview.insertBefore(imageElement, uploadPhoto);
   };
 
-  var uploadFile = function (filesPlace, preview, acceptFile, cb) {
-    for (var i = 0; i < filesPlace.files.length; i++) {
-      var file = filesPlace.files[i];
+  var uploadFile = function (filePlace, preview, acceptFile, cb) {
+    var files = [].map.call(filePlace.files, function (fileElement) {
+      return fileElement;
+    });
+
+    files.forEach(function (file) {
       var fileName = file.name.toLowerCase();
       var matches = FILE_TYPES.some(function (it) {
         return fileName.endsWith(it);
@@ -40,7 +43,7 @@
       if (matches) {
         acceptFile(preview, file, cb);
       }
-    }
+    });
   };
 
   var acceptPhoto = function (preview, file, cb) {
